@@ -83,9 +83,28 @@ class LineTest {
         // when
         long totalDistance = 신분당선.getTotalDistance();
 
+        // then
         assertThat(totalDistance).isEqualTo(firstSectionDistance + secondSectionDistance);
     }
 
+    @Test
+    void getUpStationTerminal() {
+        // given
+        Station 상행종점역 = createStation("상행종점역");
+        Line 신분당선 = createLine("신분당선", "red", createSection(상행종점역, 신논현역, (long) 10));
+        신분당선.addSection(createSection(신논현역, 양재역, (long) 15));
+
+        // when
+        Station updatedUpStationTerminal = lineRepository.findById(신분당선.getId())
+                .orElseThrow(RuntimeException::new)
+                .getUpStationTerminal();
+
+        // then
+        assertAll(
+                () -> assertThat(updatedUpStationTerminal.getId()).isEqualTo(상행종점역.getId()),
+                () -> assertThat(updatedUpStationTerminal.getName()).isEqualTo(상행종점역.getName())
+        );
+    }
     private Station createStation(String name) {
         Station station = Station.builder().name(name).build();
         stationRepository.save(station);
