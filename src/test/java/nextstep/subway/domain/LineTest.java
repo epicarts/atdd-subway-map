@@ -41,7 +41,7 @@ class LineTest {
     @Test
     void updateNameAndColor() {
         // given
-        Line 신분당선 = Line.createLine("신분당선", "red", createSection(강남역, 신논현역, (long) 15));
+        Line 신분당선 = createLine("신분당선", "red", createSection(강남역, 신논현역, (long) 15));
         lineRepository.save(신분당선);
 
         String newColor = "blue";
@@ -62,7 +62,7 @@ class LineTest {
     @Test
     public void addSection() {
         // given
-        Line 신분당선 = Line.createLine("신분당선", "red", createSection(강남역, 신논현역, (long) 15));
+        Line 신분당선 = createLine("신분당선", "red", createSection(강남역, 신논현역, (long) 15));
         Section newSection = createSection(신논현역, 양재역, (long) 15);
 
         // when
@@ -72,14 +72,28 @@ class LineTest {
         assertThat(신분당선.getStations()).containsExactly(강남역, 신논현역, 양재역);
     }
 
+    @Test
+    void getTotalDistance() {
+        // given
+        long firstSectionDistance = 110;
+        long secondSectionDistance = 200;
+        Line 신분당선 = createLine("신분당선", "red", createSection(강남역, 신논현역, firstSectionDistance));
+        신분당선.addSection(createSection(신논현역, 양재역, secondSectionDistance));
+
+        // when
+        long totalDistance = 신분당선.getTotalDistance();
+
+        assertThat(totalDistance).isEqualTo(firstSectionDistance + secondSectionDistance);
+    }
+
     private Station createStation(String name) {
-        Station station = Station.builder().name("신논현역").build();
+        Station station = Station.builder().name(name).build();
         stationRepository.save(station);
         return station;
     }
 
     private Line createLine(String name, String color, Section section) {
-        Line line = Line.createLine("신분당선", "red", section);
+        Line line = Line.createLine(name, color, section);
         lineRepository.save(line);
         return line;
     }
