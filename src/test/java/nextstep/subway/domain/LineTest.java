@@ -32,7 +32,6 @@ class LineTest {
         강남역 = Station.builder().name("강남역").build();
         신논현역 = Station.builder().name("신논현역").build();
         양재역 = Station.builder().name("양재역").build();
-
     }
 
     @Test
@@ -54,5 +53,17 @@ class LineTest {
                 () -> assertThat(updatedLine.getColor()).isEqualTo(newColor),
                 () -> assertThat(updatedLine.getName()).isEqualTo(newName)
         );
+    }
+    @Test
+    public void addSection() {
+        // given
+        신분당선 = Line.createLine("신분당선", "red", Section.createSection(강남역, 신논현역, (long) 15));
+        Section newSection = Section.createSection(신논현역, 양재역, (long) 15);
+
+        // when
+        신분당선.addSection(newSection);
+
+        // then
+        assertThat(신분당선.getStations()).containsExactly(강남역, 신논현역, 양재역);
     }
 }
