@@ -105,6 +105,26 @@ class LineTest {
                 () -> assertThat(updatedUpStationTerminal.getName()).isEqualTo(상행종점역.getName())
         );
     }
+
+    @Test
+    void getDownStationTerminal() {
+        // given
+        Station 하행종점역 = createStation("하행종점역");
+        Line 신분당선 = createLine("신분당선", "red", createSection(강남역, 신논현역, (long) 10));
+        신분당선.addSection(createSection(신논현역, 하행종점역, (long) 15));
+
+        // when
+        Station downStationTerminal = lineRepository.findById(신분당선.getId())
+                .orElseThrow(RuntimeException::new)
+                .getDownStationTerminal();
+
+        // then
+        assertAll(
+                () -> assertThat(downStationTerminal.getId()).isEqualTo(하행종점역.getId()),
+                () -> assertThat(downStationTerminal.getName()).isEqualTo(하행종점역.getName())
+        );
+    }
+
     private Station createStation(String name) {
         Station station = Station.builder().name(name).build();
         stationRepository.save(station);
