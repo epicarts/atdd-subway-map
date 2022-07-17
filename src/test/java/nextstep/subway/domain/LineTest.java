@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import javax.transaction.Transactional;
 import nextstep.subway.acceptance.utils.DatabaseCleanup;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,24 +19,29 @@ class LineTest {
     @Autowired
     LineRepository lineRepository;
 
+    @Autowired
+    StationRepository stationRepository;
+
+    @Autowired
+    SectionRepository sectionRepository;
+
     private Station 강남역;
     private Station 신논현역;
     private Station 양재역;
-    private Line 신분당선;
 
     @BeforeEach
     public void setUp() {
         databaseCleanup.execute();
 
-        강남역 = Station.builder().name("강남역").build();
-        신논현역 = Station.builder().name("신논현역").build();
-        양재역 = Station.builder().name("양재역").build();
+        강남역 = createStation("강남역");
+        신논현역 = createStation("신논현역");
+        양재역 = createStation("양재역");
     }
 
     @Test
     void updateNameAndColor() {
         // given
-        신분당선 = Line.createLine("신분당선", "red", Section.createSection(강남역, 신논현역, (long) 15));
+        Line 신분당선 = Line.createLine("신분당선", "red", createSection(강남역, 신논현역, (long) 15));
         lineRepository.save(신분당선);
 
         String newColor = "blue";
@@ -54,16 +58,35 @@ class LineTest {
                 () -> assertThat(updatedLine.getName()).isEqualTo(newName)
         );
     }
+
     @Test
     public void addSection() {
         // given
-        신분당선 = Line.createLine("신분당선", "red", Section.createSection(강남역, 신논현역, (long) 15));
-        Section newSection = Section.createSection(신논현역, 양재역, (long) 15);
+        Line 신분당선 = Line.createLine("신분당선", "red", createSection(강남역, 신논현역, (long) 15));
+        Section newSection = createSection(신논현역, 양재역, (long) 15);
 
         // when
         신분당선.addSection(newSection);
 
         // then
         assertThat(신분당선.getStations()).containsExactly(강남역, 신논현역, 양재역);
+    }
+
+    private Station createStation(String name) {
+        Station station = Station.builder().name("신논현역").build();
+        stationRepository.save(station);
+        return station;
+    }
+
+    private Line createLine(String name, String color, Section section) {
+        Line line = Line.createLine("신분당선", "red", section);
+        lineRepository.save(line);
+        return line;
+    }
+
+    private Section createSection(Station upStation, Station downStation, Long distance) {
+        Section section = Section.createSection(upStation, downStation, distance);
+        sectionRepository.save(section);
+        return section;
     }
 }
