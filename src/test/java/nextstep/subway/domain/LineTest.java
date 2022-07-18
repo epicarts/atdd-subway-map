@@ -1,15 +1,18 @@
 package nextstep.subway.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import javax.transaction.Transactional;
 import nextstep.subway.acceptance.utils.DatabaseCleanup;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+@DisplayName("Line 도메인 객체 테스트")
 @SpringBootTest
 @Transactional
 class LineTest {
@@ -38,6 +41,7 @@ class LineTest {
         양재역 = createStation("양재역");
     }
 
+    @DisplayName("이름과 색깔 수정")
     @Test
     void updateNameAndColor() {
         // given
@@ -59,6 +63,7 @@ class LineTest {
         );
     }
 
+    @DisplayName("구간 추가")
     @Test
     public void addSection() {
         // given
@@ -72,6 +77,7 @@ class LineTest {
         assertThat(신분당선.getStations()).containsExactly(강남역, 신논현역, 양재역);
     }
 
+    @DisplayName("상행 종점역 가져오기")
     @Test
     void getUpStationTerminal() {
         // given
@@ -91,6 +97,7 @@ class LineTest {
         );
     }
 
+    @DisplayName("하행 종점역 가져오기")
     @Test
     void getDownStationTerminal() {
         // given
