@@ -133,6 +133,23 @@ class LineTest {
         );
     }
 
+    @DisplayName("구간 삭제")
+    @Test
+    void deleteSection() {
+        // given
+        Line 신분당선 = createLine("신분당선", "red", createSection(강남역, 신논현역, (long) 10));
+        신분당선.addSection(createSection(신논현역, 양재역, (long) 15));
+
+        // when
+        신분당선.deleteSection(양재역);
+
+        // then
+        assertAll(
+                () -> assertThat(신분당선.getStations()).hasSize(2),
+                () -> assertThat(신분당선.getStations()).containsExactly(강남역, 신논현역)
+        );
+    }
+
     private Station createStation(String name) {
         Station station = Station.builder().name(name).build();
         stationRepository.save(station);
