@@ -74,7 +74,10 @@ class LineTest {
         신분당선.addSection(newSection);
 
         // then
-        assertThat(신분당선.getStations()).containsExactly(강남역, 신논현역, 양재역);
+        assertAll(
+                () -> assertThat(신분당선.getStations()).hasSize(3),
+                () -> assertThat(신분당선.getStations()).containsExactly(강남역, 신논현역, 양재역)
+        );
     }
 
     @DisplayName("중복 구간 추가")
