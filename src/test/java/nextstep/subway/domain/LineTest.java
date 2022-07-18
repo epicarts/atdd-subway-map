@@ -73,21 +73,6 @@ class LineTest {
     }
 
     @Test
-    void getTotalDistance() {
-        // given
-        long firstSectionDistance = 110;
-        long secondSectionDistance = 200;
-        Line 신분당선 = createLine("신분당선", "red", createSection(강남역, 신논현역, firstSectionDistance));
-        신분당선.addSection(createSection(신논현역, 양재역, secondSectionDistance));
-
-        // when
-        long totalDistance = 신분당선.getTotalDistance();
-
-        // then
-        assertThat(totalDistance).isEqualTo(firstSectionDistance + secondSectionDistance);
-    }
-
-    @Test
     void getUpStationTerminal() {
         // given
         Station 상행종점역 = createStation("상행종점역");
