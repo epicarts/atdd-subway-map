@@ -77,6 +77,19 @@ class LineTest {
         assertThat(신분당선.getStations()).containsExactly(강남역, 신논현역, 양재역);
     }
 
+    @DisplayName("중복 구간 추가")
+    @Test
+    public void addSectionWithDuplicateSection() {
+        // given
+        Line 신분당선 = createLine("신분당선", "red", createSection(강남역, 신논현역, (long) 15));
+        Section newSection = createSection(강남역, 신논현역, (long) 15);
+
+        // when
+        // then
+        assertThatThrownBy(() -> 신분당선.addSection(newSection))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
     @DisplayName("상행 종점역 가져오기")
     @Test
     void getUpStationTerminal() {
