@@ -2,9 +2,11 @@ package nextstep.subway.applicaion.dto;
 
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
+@EqualsAndHashCode
 public class StationResponse {
     private Long id;
     private String name;
