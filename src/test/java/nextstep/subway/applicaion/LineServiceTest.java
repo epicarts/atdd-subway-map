@@ -40,4 +40,18 @@ public class LineServiceTest {
         선릉역 = stationService.saveStation(new StationRequest("선릉역"));
         lineService = new LineService(lineRepository, stationRepository, sectionRepository);
     }
+
+    @Test
+    void addSection() {
+        // given
+        LineResponse 이호선 = lineService
+                .saveLine(new LineRequest("2호선", "green", 강남역.getId(), 역삼역.getId(), (long) 10));
+
+        // when
+        lineService.addSection(이호선.getId(), new SectionRequest(역삼역.getId(), 선릉역.getId(), (long) 10));
+
+        // then
+        LineResponse lineResponse = lineService.findLine(이호선.getId());
+        assertThat(lineResponse.getStations()).containsExactly(강남역, 역삼역, 선릉역);
+    }
 }
