@@ -150,6 +150,18 @@ class LineTest {
         );
     }
 
+    @DisplayName("하나의 구간 삭제")
+    @Test
+    void deleteSectionHasOneSection() {
+        // given
+        Line 신분당선 = createLine("신분당선", "red", createSection(강남역, 신논현역, (long) 10));
+
+        // when
+        // then
+        assertThatThrownBy(() -> 신분당선.deleteSection(신논현역))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
     private Station createStation(String name) {
         Station station = Station.builder().name(name).build();
         stationRepository.save(station);
