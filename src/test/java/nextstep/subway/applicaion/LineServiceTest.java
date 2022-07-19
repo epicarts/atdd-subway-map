@@ -18,6 +18,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 @SpringBootTest
 @Transactional
 public class LineServiceTest {
@@ -34,10 +36,12 @@ public class LineServiceTest {
     private StationResponse 강남역;
     private StationResponse 역삼역;
     private StationResponse 선릉역;
+    private StationResponse 양재역;
 
     @BeforeEach
     void setUp() {
         강남역 = stationService.saveStation(new StationRequest("강남역"));
+        양재역 = stationService.saveStation(new StationRequest("양재역"));
         역삼역 = stationService.saveStation(new StationRequest("역삼역"));
         선릉역 = stationService.saveStation(new StationRequest("선릉역"));
         lineService = new LineService(lineRepository, stationRepository, sectionRepository);
@@ -73,6 +77,28 @@ public class LineServiceTest {
                 () -> assertThat(이호선.getColor()).isEqualTo(lineColor),
                 () -> assertThat(이호선.getName()).isEqualTo(lineName),
                 () -> assertThat(이호선.getStations()).containsExactly(강남역, 역삼역)
+        );
+    }
+
+    @Test
+    void findAllLines() {
+        // given
+        LineResponse 이호선 = lineService
+                .saveLine(new LineRequest("2호선", "green", 역삼역.getId(), 선릉역.getId(), (long) 10));
+        LineResponse 신분당선 = lineService
+                .saveLine(new LineRequest("신분당선", "red", 강남역.getId(), 양재역.getId(), (long) 10));
+
+        // when
+        List<LineResponse> allLines = lineService.findAllLines();
+
+        // then
+        assertAll(
+                () -> assertThat(allLines)
+                        .hasSize(2),
+                () -> assertThat(allLines)
+                        .extracting("name").containsOnlyOnce(이호선.getName(), 신분당선.getName()),
+                () -> assertThat(allLines)
+                        .extracting("color").containsOnlyOnce(이호선.getColor(), 신분당선.getColor())
         );
     }
 }
