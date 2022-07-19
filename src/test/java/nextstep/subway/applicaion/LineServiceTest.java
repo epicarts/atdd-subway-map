@@ -58,6 +58,25 @@ public class LineServiceTest {
     }
 
     @Test
+    void deleteSection() {
+        // given
+        LineResponse 이호선 = lineService
+                .saveLine(new LineRequest("2호선", "green", 강남역.getId(), 역삼역.getId(), (long) 10));
+        lineService.addSection(이호선.getId(), new SectionRequest(역삼역.getId(), 선릉역.getId(), (long) 10));
+
+        // when
+        lineService.deleteSection(이호선.getId(), 선릉역.getId());
+
+        // then
+        LineResponse lineResponse = lineService.findLine(이호선.getId());
+
+        assertAll(
+                () -> assertThat(lineResponse.getStations()).hasSize(2),
+                () -> assertThat(lineResponse.getStations()).containsExactly(강남역, 역삼역)
+        );
+    }
+
+    @Test
     void saveLine() {
         // given
         String lineName = "2호선";
