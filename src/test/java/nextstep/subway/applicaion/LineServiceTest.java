@@ -1,8 +1,10 @@
 package nextstep.subway.applicaion;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import javax.transaction.Transactional;
+
 import nextstep.subway.applicaion.dto.LineRequest;
 import nextstep.subway.applicaion.dto.LineResponse;
 import nextstep.subway.applicaion.dto.SectionRequest;
@@ -53,5 +55,24 @@ public class LineServiceTest {
         // then
         LineResponse lineResponse = lineService.findLine(이호선.getId());
         assertThat(lineResponse.getStations()).containsExactly(강남역, 역삼역, 선릉역);
+    }
+
+    @Test
+    void saveLine() {
+        // given
+        String lineName = "2호선";
+        String lineColor = "green";
+        LineRequest lineRequest = new LineRequest("2호선", "green", 강남역.getId(), 역삼역.getId(), (long) 10);
+
+        // when
+        LineResponse LineResponse = lineService.saveLine(lineRequest);
+
+        // then
+        LineResponse 이호선 = lineService.findLine(LineResponse.getId());
+        assertAll(
+                () -> assertThat(이호선.getColor()).isEqualTo(lineColor),
+                () -> assertThat(이호선.getName()).isEqualTo(lineName),
+                () -> assertThat(이호선.getStations()).containsExactly(강남역, 역삼역)
+        );
     }
 }
