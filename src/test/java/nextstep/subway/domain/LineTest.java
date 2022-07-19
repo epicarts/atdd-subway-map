@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import javax.transaction.Transactional;
+
 import nextstep.subway.acceptance.utils.DatabaseCleanup;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,14 +18,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Transactional
 class LineTest {
     @Autowired
-    DatabaseCleanup databaseCleanup;
-
-    @Autowired
     LineRepository lineRepository;
-
     @Autowired
     StationRepository stationRepository;
-
     @Autowired
     SectionRepository sectionRepository;
 
@@ -34,8 +30,6 @@ class LineTest {
 
     @BeforeEach
     public void setUp() {
-        databaseCleanup.execute();
-
         강남역 = createStation("강남역");
         신논현역 = createStation("신논현역");
         양재역 = createStation("양재역");
