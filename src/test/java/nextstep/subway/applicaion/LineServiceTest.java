@@ -1,8 +1,10 @@
 package nextstep.subway.applicaion;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
 import nextstep.subway.applicaion.dto.*;
@@ -93,6 +95,20 @@ public class LineServiceTest {
                 () -> assertThat(이호선.getName()).isEqualTo(lineName),
                 () -> assertThat(이호선.getStations()).containsExactly(강남역, 역삼역)
         );
+    }
+
+    @Test
+    void deleteLineById() {
+        // given
+        LineResponse 이호선 = lineService
+                .saveLine(new LineRequest("2호선", "green", 역삼역.getId(), 선릉역.getId(), (long) 10));
+
+        // when
+        lineService.deleteLineById(이호선.getId());
+
+        // then
+        assertThatThrownBy(() -> lineService.findLine(이호선.getId()))
+                .isInstanceOf(EntityNotFoundException.class);
     }
 
     @Test
