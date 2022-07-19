@@ -5,11 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import javax.transaction.Transactional;
 
-import nextstep.subway.applicaion.dto.LineRequest;
-import nextstep.subway.applicaion.dto.LineResponse;
-import nextstep.subway.applicaion.dto.SectionRequest;
-import nextstep.subway.applicaion.dto.StationRequest;
-import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.applicaion.dto.*;
 import nextstep.subway.domain.LineRepository;
 import nextstep.subway.domain.SectionRepository;
 import nextstep.subway.domain.StationRepository;
@@ -100,5 +96,25 @@ public class LineServiceTest {
                 () -> assertThat(allLines)
                         .extracting("color").containsOnlyOnce(이호선.getColor(), 신분당선.getColor())
         );
+    }
+
+    @Test
+    void updateLine() {
+        // given
+        String newLineName = "2호선";
+        String newLineColor = "green";
+        LineResponse 신분당선 = lineService
+                .saveLine(new LineRequest("신분당선", "red", 강남역.getId(), 양재역.getId(), (long) 10));
+
+        // when
+        lineService.updateLine(신분당선.getId(), new LineUpdateRequest(newLineName, newLineColor));
+
+        // then
+        LineResponse newResponse = lineService.findLine(신분당선.getId());
+        assertAll(
+                () -> assertThat(newResponse.getColor()).isEqualTo(newLineColor),
+                () -> assertThat(newResponse.getName()).isEqualTo(newLineName)
+        );
+
     }
 }

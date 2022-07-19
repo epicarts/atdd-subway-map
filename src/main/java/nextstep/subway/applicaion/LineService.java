@@ -3,10 +3,8 @@ package nextstep.subway.applicaion;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
-import nextstep.subway.applicaion.dto.LineRequest;
-import nextstep.subway.applicaion.dto.LineResponse;
-import nextstep.subway.applicaion.dto.SectionRequest;
-import nextstep.subway.applicaion.dto.StationResponse;
+
+import nextstep.subway.applicaion.dto.*;
 import nextstep.subway.domain.Line;
 import nextstep.subway.domain.LineRepository;
 import nextstep.subway.domain.Section;
@@ -53,7 +51,7 @@ public class LineService {
     }
 
     @Transactional
-    public void updateLine(Long lineId, LineRequest lineRequest) {
+    public void updateLine(Long lineId, LineUpdateRequest lineRequest) {
         Line line = getLine(lineId);
         line.updateNameAndColor(lineRequest.getName(), lineRequest.getColor());
         lineRepository.save(line);
