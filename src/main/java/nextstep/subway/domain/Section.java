@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.Min;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -58,5 +59,8 @@ public class Section {
                 .build();
     }
 
-
+    public boolean isSameSection(Section newSection) {
+        return this.getUpStation() == newSection.getUpStation()
+                && this.getDownStation() == newSection.getDownStation();
+    }
 }

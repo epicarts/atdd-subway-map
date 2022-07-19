@@ -37,7 +37,7 @@ public class Sections {
 
     private void checkDuplicationSectionOrStation(Section newSection) {
         this.sections.stream()
-                .filter(section -> isSameSection(newSection, section)
+                .filter(section -> section.isSameSection(newSection)
                         || isNewSectionDownStationInLine(newSection, section))
                 .findFirst()
                 .ifPresent(section -> {
@@ -125,11 +125,6 @@ public class Sections {
     private boolean isNewSectionDownStationInLine(Section newSection, Section section) {
         return section.getUpStation() == newSection.getDownStation()
                 || section.getDownStation() == newSection.getDownStation();
-    }
-
-    private boolean isSameSection(Section newSection, Section section) {
-        return section.getUpStation() == newSection.getUpStation()
-                && section.getDownStation() == newSection.getDownStation();
     }
 
     private boolean isNotTerminalDownStation(Section newSection) {
